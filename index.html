@@ -687,7 +687,6 @@ async function convert() {
     const res = await fetch('https://vectorizer-proxy.meezmeez98.workers.dev', {
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + btoa(`${API_ID}:${API_SECRET}`),
         'Content-Type': `multipart/form-data; boundary=${boundary}`,
       },
       body
