@@ -684,7 +684,7 @@ async function convert() {
     activateStep(2);
     setProg(25, 'جاري تحليل الصورة...');
 
-    const res = await fetch('https://vectorizer.ai/api/v1/vectorize', {
+    const res = await fetch('https://vectorizer-proxy.meezmeez98.workers.dev', {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + btoa(`${API_ID}:${API_SECRET}`),
