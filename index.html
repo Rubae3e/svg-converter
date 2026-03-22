@@ -3,112 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محول صور التلوين - النسخة الكاملة</title>
+<title>محول صور التلوين</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
-
 :root {
-  --bg: #0d0d0d;
-  --card: #161616;
-  --card2: #1e1e1e;
-  --gold: #f0b429;
-  --gold2: #ffd166;
-  --text: #f0f0f0;
-  --text2: #888;
-  --green: #06d6a0;
-  --red: #ef476f;
-  --blue: #4361ee;
-  --border: #2a2a2a;
-  --radius: 16px;
+  --bg: #0d0d0d; --card: #161616; --card2: #1e1e1e;
+  --gold: #f0b429; --gold2: #ffd166; --text: #f0f0f0;
+  --text2: #888; --green: #06d6a0; --red: #ef476f;
+  --blue: #4361ee; --border: #2a2a2a; --radius: 16px;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  font-family: 'Tajawal', sans-serif;
-  color: var(--text);
-  min-height: 100vh;
-}
-
-.bg-grid {
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(240,180,41,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240,180,41,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-}
-
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  position: relative;
-  z-index: 1;
-}
-
+body { background: var(--bg); font-family: 'Tajawal', sans-serif; color: var(--text); min-height: 100vh; }
+.bg-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(240,180,41,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(240,180,41,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
 header { text-align: center; margin-bottom: 40px; }
 .logo { font-size: 3rem; display: block; margin-bottom: 12px; }
-
-h1 {
-  font-size: 2rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 8px;
-}
-
+h1 { font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--gold), var(--gold2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
 .subtitle { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
-
-.upload-area {
-  background: var(--card);
-  border: 2px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 48px 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-bottom: 20px;
-}
-
-.upload-area:hover, .upload-area.over {
-  border-color: var(--gold);
-  box-shadow: 0 0 40px rgba(240,180,41,0.08);
-}
-
+.upload-area { background: var(--card); border: 2px dashed var(--border); border-radius: var(--radius); padding: 48px 24px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
+.upload-area:hover, .upload-area.over { border-color: var(--gold); box-shadow: 0 0 40px rgba(240,180,41,0.08); }
 .upload-area .icon { font-size: 3rem; display: block; margin-bottom: 10px; }
 .upload-area .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
 .upload-area .hint { color: var(--text2); font-size: 0.82rem; }
 #fileInput { display: none; }
-
 .previews { display: none; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
 .previews.show { display: grid; }
-
 .pbox { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-
 .plabel { padding: 10px 14px; font-size: 0.78rem; font-weight: 700; color: var(--text2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
-
 .pimg { width: 100%; height: 220px; object-fit: contain; background: #111; padding: 10px; display: block; }
-
 .psvg { width: 100%; height: 220px; background: white; display: flex; align-items: center; justify-content: center; padding: 8px; overflow: hidden; }
 .psvg svg { max-width: 100%; max-height: 204px; }
-
 .settings { display: none; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
 .settings.show { display: block; }
 .settings-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 16px; color: var(--text2); }
 .settings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-
 .sfield label { display: block; font-size: 0.78rem; color: var(--text2); margin-bottom: 6px; }
 .sfield select { width: 100%; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-family: 'Tajawal', sans-serif; font-size: 0.85rem; outline: none; }
 .sfield select:focus { border-color: var(--gold); }
-
 .cvt-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--gold), var(--gold2)); border: none; border-radius: var(--radius); color: #000; font-family: 'Tajawal', sans-serif; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; box-shadow: 0 8px 30px rgba(240,180,41,0.25); }
 .cvt-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(240,180,41,0.35); }
 .cvt-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
 .prog-box { display: none; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
 .prog-box.show { display: block; }
 .prog-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.88rem; }
@@ -118,46 +52,38 @@ h1 {
 .step-pill { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; background: var(--card2); color: var(--text2); border: 1px solid var(--border); transition: all 0.3s; }
 .step-pill.active { background: rgba(240,180,41,0.1); color: var(--gold); border-color: var(--gold); }
 .step-pill.done { background: rgba(6,214,160,0.1); color: var(--green); border-color: var(--green); }
-
 .err-box { display: none; background: rgba(239,71,111,0.08); border: 1px solid var(--red); border-radius: var(--radius); padding: 16px 20px; color: var(--red); font-size: 0.88rem; margin-bottom: 20px; line-height: 1.5; }
 .err-box.show { display: block; }
-
 .result-box { display: none; background: var(--card); border: 1px solid var(--green); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
 .result-box.show { display: block; }
 .res-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .res-icon { width: 44px; height: 44px; background: rgba(6,214,160,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .res-title { font-size: 1rem; font-weight: 700; color: var(--green); }
 .res-sub { font-size: 0.8rem; color: var(--text2); }
-
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
 .stat { background: var(--card2); border-radius: 10px; padding: 12px 8px; text-align: center; border: 1px solid var(--border); }
 .stat-v { font-size: 1.2rem; font-weight: 900; color: var(--gold); }
 .stat-l { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
-
 .palette-section { margin-bottom: 16px; }
 .palette-title { font-size: 0.82rem; color: var(--text2); margin-bottom: 10px; font-weight: 700; }
 .palette-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .color-chip { display: flex; align-items: center; gap: 6px; background: var(--card2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px 4px 4px; font-size: 0.75rem; }
 .color-dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
 .color-num { font-weight: 700; color: var(--text); }
-
 .dl-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 .dl-btn { padding: 13px 8px; border-radius: 10px; border: none; font-family: 'Tajawal', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .dl-btn.gold { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
 .dl-btn.blue { background: rgba(67,97,238,0.15); color: #7b9fff; border: 1px solid rgba(67,97,238,0.3); }
 .dl-btn.dark { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
 .dl-btn:hover { transform: translateY(-1px); }
-
 .guide { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
 .guide h3 { color: var(--gold); margin-bottom: 16px; font-size: 0.95rem; }
 .guide-steps { display: flex; flex-direction: column; gap: 10px; }
 .guide-step { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
 .gnum { width: 24px; height: 24px; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 900; flex-shrink: 0; }
 code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; }
-
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .pulse { animation: pulse 1.5s infinite; }
-
 @media(max-width:600px) {
   h1 { font-size: 1.5rem; }
   .previews.show { grid-template-columns: 1fr; }
@@ -175,14 +101,12 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
     <h1>محول صور التلوين</h1>
     <p class="subtitle">ارفع اي صورة واحصل على SVG تلوين بالارقام جاهز لـ colordrama</p>
   </header>
-
   <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
     <span class="icon">📁</span>
     <div class="title">اسحب الصورة هنا او اضغط للاختيار</div>
-    <div class="hint">PNG, JPG, WEBP - الحد الاقصى 10MB - الافضل: صور كارتونية بخطوط واضحة</div>
+    <div class="hint">PNG, JPG, WEBP - الحد الاقصى 10MB</div>
     <input type="file" id="fileInput" accept="image/*">
   </div>
-
   <div class="previews" id="previews">
     <div class="pbox">
       <div class="plabel">الصورة الاصلية</div>
@@ -190,12 +114,9 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
     </div>
     <div class="pbox">
       <div class="plabel">نتيجة التلوين بالارقام</div>
-      <div class="psvg" id="svgPreview">
-        <span style="color:#999;font-size:0.82rem">في انتظار التحويل...</span>
-      </div>
+      <div class="psvg" id="svgPreview"><span style="color:#999;font-size:0.82rem">في انتظار التحويل...</span></div>
     </div>
   </div>
-
   <div class="settings" id="settings">
     <div class="settings-title">اعدادات التحويل</div>
     <div class="settings-grid">
@@ -227,19 +148,13 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
       </div>
     </div>
   </div>
-
-  <button class="cvt-btn" id="cvtBtn" onclick="convert()" disabled>
-    تحويل الى لغز تلوين
-  </button>
-
+  <button class="cvt-btn" id="cvtBtn" onclick="convert()" disabled>تحويل الى لغز تلوين</button>
   <div class="prog-box" id="progBox">
     <div class="prog-head">
       <span id="progText" class="pulse">جاري التحويل...</span>
       <span id="progPct">0%</span>
     </div>
-    <div class="prog-track">
-      <div class="prog-fill" id="progFill"></div>
-    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
     <div class="steps-row">
       <div class="step-pill" id="sp1">رفع الصورة</div>
       <div class="step-pill" id="sp2">تحليل الالوان</div>
@@ -249,9 +164,7 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
       <div class="step-pill" id="sp6">اكتمل</div>
     </div>
   </div>
-
   <div class="err-box" id="errBox"></div>
-
   <div class="result-box" id="resultBox">
     <div class="res-head">
       <div class="res-icon">✅</div>
@@ -276,7 +189,6 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
       <button class="dl-btn dark" onclick="downloadDart()">كود Flutter</button>
     </div>
   </div>
-
   <div class="guide">
     <h3>كيفية الاستخدام في colordrama</h3>
     <div class="guide-steps">
@@ -288,28 +200,15 @@ code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; 
     </div>
   </div>
 </div>
-
 <script>
 const PROXY = 'https://vectorizer-proxy.meezmeez98.workers.dev';
+let selectedFile = null, coloredSVG = null, numberedSVG = null, colorMap = {};
 
-let selectedFile = null;
-let coloredSVG = null;
-let numberedSVG = null;
-let colorMap = {};
-
-document.getElementById('fileInput').addEventListener('change', e => {
-  if (e.target.files[0]) loadFile(e.target.files[0]);
-});
-
+document.getElementById('fileInput').addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
 const ua = document.getElementById('uploadArea');
 ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('over'); });
 ua.addEventListener('dragleave', () => ua.classList.remove('over'));
-ua.addEventListener('drop', e => {
-  e.preventDefault();
-  ua.classList.remove('over');
-  const f = e.dataTransfer.files[0];
-  if (f && f.type.startsWith('image/')) loadFile(f);
-});
+ua.addEventListener('drop', e => { e.preventDefault(); ua.classList.remove('over'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) loadFile(f); });
 
 function loadFile(file) {
   selectedFile = file;
@@ -329,99 +228,57 @@ function loadFile(file) {
 async function convert() {
   if (!selectedFile) return;
   const btn = document.getElementById('cvtBtn');
-  btn.disabled = true;
-  coloredSVG = null;
-  numberedSVG = null;
+  btn.disabled = true; coloredSVG = null; numberedSVG = null;
   showProg();
   document.getElementById('errBox').classList.remove('show');
   document.getElementById('resultBox').classList.remove('show');
-
   try {
-    activateStep(1);
-    setProg(10, 'جاري تحضير الصورة...');
-
+    activateStep(1); setProg(10, 'جاري تحضير الصورة...');
     const arrayBuffer = await selectedFile.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
     const boundary = '----CVBoundary' + Date.now();
     const enc = new TextEncoder();
-
     const parts = [];
     parts.push(enc.encode('--' + boundary + '\r\nContent-Disposition: form-data; name="image"; filename="' + selectedFile.name + '"\r\nContent-Type: ' + selectedFile.type + '\r\n\r\n'));
     parts.push(uint8Array);
     parts.push(enc.encode('\r\n'));
     parts.push(enc.encode('--' + boundary + '--\r\n'));
-
     const totalLen = parts.reduce((s, p) => s + p.length, 0);
     const body = new Uint8Array(totalLen);
     let off = 0;
     for (const p of parts) { body.set(p, off); off += p.length; }
 
-    activateStep(2);
-    setProg(25, 'جاري ارسال الصورة...');
-
-    const res = await fetch(PROXY, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data; boundary=' + boundary,
-      },
-      body
-    });
-
-    activateStep(3);
-    setProg(55, 'جاري تحويل لـ SVG...');
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error('API Error ' + res.status + ': ' + err.slice(0, 200));
-    }
-
+    activateStep(2); setProg(25, 'جاري ارسال الصورة...');
+    const res = await fetch(PROXY, { method: 'POST', headers: { 'Content-Type': 'multipart/form-data; boundary=' + boundary }, body });
+    activateStep(3); setProg(55, 'جاري تحويل لـ SVG...');
+    if (!res.ok) { const err = await res.text(); throw new Error('API Error ' + res.status + ': ' + err.slice(0, 200)); }
     coloredSVG = await res.text();
 
-    activateStep(4);
-    setProg(75, 'جاري اضافة ارقام...');
-
+    activateStep(4); setProg(75, 'جاري اضافة ارقام...');
     const result = processSVG(coloredSVG);
-    numberedSVG = result.numbered;
-    colorMap = result.palette;
+    numberedSVG = result.numbered; colorMap = result.palette;
 
-    activateStep(5);
-    setProg(90, 'جاري ازالة الالوان...');
-    await sleep(300);
-
-    activateStep(6);
-    setProg(100, 'اكتمل!');
+    activateStep(5); setProg(90, 'جاري ازالة الالوان...'); await sleep(300);
+    activateStep(6); setProg(100, 'اكتمل!');
 
     document.getElementById('svgPreview').innerHTML = numberedSVG;
     const svgEl = document.getElementById('svgPreview').querySelector('svg');
-    if (svgEl) {
-      svgEl.style.maxWidth = '100%';
-      svgEl.style.maxHeight = '204px';
-    }
+    if (svgEl) { svgEl.style.maxWidth = '100%'; svgEl.style.maxHeight = '204px'; }
 
     const colorCount = Object.keys(colorMap).length;
     document.getElementById('sPaths').textContent = result.paths;
     document.getElementById('sColors').textContent = colorCount;
     document.getElementById('sSize').textContent = Math.round(new Blob([numberedSVG]).size / 1024);
-    let diff = colorCount > 30 ? 'صعب' : colorCount > 15 ? 'متوسط' : 'سهل';
+    const diff = colorCount > 30 ? 'صعب' : colorCount > 15 ? 'متوسط' : 'سهل';
     document.getElementById('sDiff').textContent = diff;
     document.getElementById('resSub').textContent = result.paths + ' منطقة - ' + colorCount + ' لون - مستوى ' + diff;
-
     buildPalette(colorMap);
-
-    setTimeout(() => {
-      document.getElementById('progBox').classList.remove('show');
-      document.getElementById('resultBox').classList.add('show');
-    }, 500);
-
+    setTimeout(() => { document.getElementById('progBox').classList.remove('show'); document.getElementById('resultBox').classList.add('show'); }, 500);
   } catch (err) {
     document.getElementById('progBox').classList.remove('show');
-    const eb = document.getElementById('errBox');
-    eb.innerHTML = 'خطا: ' + err.message;
-    eb.classList.add('show');
+    const eb = document.getElementById('errBox'); eb.innerHTML = 'خطا: ' + err.message; eb.classList.add('show');
     console.error(err);
-  } finally {
-    btn.disabled = false;
-  }
+  } finally { btn.disabled = false; }
 }
 
 function processSVG(svgText) {
@@ -434,9 +291,7 @@ function processSVG(svgText) {
   const colorCount = {};
   elements.forEach(el => {
     const color = getElementColor(el);
-    if (color && color !== 'none' && color !== 'transparent') {
-      colorCount[color] = (colorCount[color] || 0) + 1;
-    }
+    if (color && color !== 'none' && color !== 'transparent') colorCount[color] = (colorCount[color] || 0) + 1;
   });
 
   const maxColors = parseInt(document.getElementById('maxColors').value);
@@ -447,34 +302,50 @@ function processSVG(svgText) {
   const viewBox = svg.getAttribute('viewBox') || '0 0 800 600';
   const vbParts = viewBox.split(/\s+|,/);
   const vbWidth = parseFloat(vbParts[2]) || 800;
+  const baseSize = { small: vbWidth * 0.015, medium: vbWidth * 0.025, large: vbWidth * 0.04 }[document.getElementById('fontSize').value];
 
-  const fsMap = { small: Math.max(6, vbWidth * 0.02), medium: Math.max(8, vbWidth * 0.03), large: Math.max(10, vbWidth * 0.04) };
-  const fontSize = fsMap[document.getElementById('fontSize').value];
-
-  let numberedPaths = '';
-  let processedCount = 0;
+  let numberedPaths = '', processedCount = 0;
 
   elements.forEach(el => {
     const color = getElementColor(el);
     const num = colorToNum[color];
     if (!num) return;
     processedCount++;
-
     const tagName = el.tagName.toLowerCase();
     const attrs = getElementAttrs(el);
-    numberedPaths += '<' + tagName + ' ' + attrs + ' fill="white" stroke="#333" stroke-width="0.5"/>\n';
-
+    numberedPaths += '<' + tagName + ' ' + attrs + ' fill="white" stroke="#444" stroke-width="0.4"/>\n';
     const center = getElementCenter(el, tagName);
     if (center) {
-      numberedPaths += '<text x="' + center.x.toFixed(1) + '" y="' + center.y.toFixed(1) + '" text-anchor="middle" dominant-baseline="middle" font-size="' + fontSize.toFixed(1) + '" font-family="Arial" font-weight="bold" fill="#222" stroke="white" stroke-width="' + (fontSize * 0.3).toFixed(1) + '" paint-order="stroke">' + num + '</text>\n';
+      // حجم الخط يتكيف مع حجم المنطقة - رقم في كل منطقة مهما كانت صغيرة
+      const regionSize = getRegionSize(el, tagName);
+      const adaptiveSize = Math.min(baseSize, Math.max(1.5, regionSize * 0.4));
+      const strokeW = Math.max(0.2, adaptiveSize * 0.25);
+      numberedPaths += '<text x="' + center.x.toFixed(2) + '" y="' + center.y.toFixed(2) + '" text-anchor="middle" dominant-baseline="middle" font-size="' + adaptiveSize.toFixed(2) + '" font-family="Arial" font-weight="bold" fill="#111" stroke="white" stroke-width="' + strokeW.toFixed(2) + '" paint-order="stroke">' + num + '</text>\n';
     }
   });
 
   const numbered = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" style="background:white">\n' + numberedPaths + '</svg>';
   const palette = {};
   Object.entries(colorToNum).forEach(([color, num]) => { palette[num] = color; });
-
   return { numbered, palette, paths: processedCount };
+}
+
+function getRegionSize(el, tagName) {
+  try {
+    if (tagName === 'rect') return Math.min(parseFloat(el.getAttribute('width') || 0), parseFloat(el.getAttribute('height') || 0));
+    if (tagName === 'circle') return parseFloat(el.getAttribute('r') || 0) * 2;
+    if (tagName === 'ellipse') return Math.min(parseFloat(el.getAttribute('rx') || 0), parseFloat(el.getAttribute('ry') || 0)) * 2;
+    if (tagName === 'path') {
+      const d = el.getAttribute('d') || '';
+      const nums = d.match(/[-+]?\d*\.?\d+/g);
+      if (nums && nums.length >= 4) {
+        const xs = [], ys = [];
+        for (let i = 0; i < Math.min(nums.length - 1, 40); i += 2) { xs.push(parseFloat(nums[i])); ys.push(parseFloat(nums[i + 1])); }
+        return Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+      }
+    }
+  } catch (e) {}
+  return 10;
 }
 
 function getElementColor(el) {
@@ -487,33 +358,20 @@ function getElementColor(el) {
 function getElementAttrs(el) {
   const exclude = ['style', 'fill', 'stroke', 'stroke-width', 'opacity'];
   const attrs = [];
-  for (const attr of el.attributes) {
-    if (!exclude.includes(attr.name)) attrs.push(attr.name + '="' + attr.value + '"');
-  }
+  for (const attr of el.attributes) { if (!exclude.includes(attr.name)) attrs.push(attr.name + '="' + attr.value + '"'); }
   return attrs.join(' ');
 }
 
 function getElementCenter(el, tagName) {
   try {
-    if (tagName === 'rect') {
-      const x = parseFloat(el.getAttribute('x') || 0);
-      const y = parseFloat(el.getAttribute('y') || 0);
-      const w = parseFloat(el.getAttribute('width') || 0);
-      const h = parseFloat(el.getAttribute('height') || 0);
-      return { x: x + w / 2, y: y + h / 2 };
-    }
-    if (tagName === 'circle' || tagName === 'ellipse') {
-      return { x: parseFloat(el.getAttribute('cx') || 0), y: parseFloat(el.getAttribute('cy') || 0) };
-    }
+    if (tagName === 'rect') { const x = parseFloat(el.getAttribute('x') || 0), y = parseFloat(el.getAttribute('y') || 0), w = parseFloat(el.getAttribute('width') || 0), h = parseFloat(el.getAttribute('height') || 0); return { x: x + w / 2, y: y + h / 2 }; }
+    if (tagName === 'circle' || tagName === 'ellipse') return { x: parseFloat(el.getAttribute('cx') || 0), y: parseFloat(el.getAttribute('cy') || 0) };
     if (tagName === 'path') {
       const d = el.getAttribute('d') || '';
       const nums = d.match(/[-+]?\d*\.?\d+/g);
       if (nums && nums.length >= 4) {
         const xs = [], ys = [];
-        for (let i = 0; i < Math.min(nums.length - 1, 20); i += 2) {
-          xs.push(parseFloat(nums[i]));
-          ys.push(parseFloat(nums[i + 1]));
-        }
+        for (let i = 0; i < Math.min(nums.length - 1, 30); i += 2) { xs.push(parseFloat(nums[i])); ys.push(parseFloat(nums[i + 1])); }
         return { x: xs.reduce((a, b) => a + b, 0) / xs.length, y: ys.reduce((a, b) => a + b, 0) / ys.length };
       }
     }
@@ -532,22 +390,11 @@ function buildPalette(palette) {
   });
 }
 
-function downloadNumbered() {
-  if (!numberedSVG) return;
-  downloadFile(numberedSVG, 'coloring_puzzle_' + Date.now() + '.svg', 'image/svg+xml');
-}
-
-function downloadColored() {
-  if (!coloredSVG) return;
-  downloadFile(coloredSVG, 'colored_reference_' + Date.now() + '.svg', 'image/svg+xml');
-}
-
+function downloadNumbered() { if (!numberedSVG) return; downloadFile(numberedSVG, 'coloring_puzzle_' + Date.now() + '.svg', 'image/svg+xml'); }
+function downloadColored() { if (!coloredSVG) return; downloadFile(coloredSVG, 'colored_reference_' + Date.now() + '.svg', 'image/svg+xml'); }
 function downloadDart() {
   if (!colorMap || Object.keys(colorMap).length === 0) return;
-  const paletteCode = Object.entries(colorMap).map(([num, color]) => {
-    const hex = color.replace('#', '');
-    return '  PaletteColor(number: ' + num + ', color: Color(0xFF' + hex.toUpperCase() + ')),';
-  }).join('\n');
+  const paletteCode = Object.entries(colorMap).map(([num, color]) => { const hex = color.replace('#', ''); return '  PaletteColor(number: ' + num + ', color: Color(0xFF' + hex.toUpperCase() + ')),'; }).join('\n');
   const dart = '// lib/data/new_puzzle.dart\nimport \'package:flutter/material.dart\';\n\nconst List<PaletteColor> newPuzzlePalette = [\n' + paletteCode + '\n];\n';
   downloadFile(dart, 'new_puzzle_' + Date.now() + '.dart', 'text/plain');
 }
@@ -556,31 +403,14 @@ function downloadFile(content, name, type) {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-function showProg() {
-  document.getElementById('progBox').classList.add('show');
-  ['sp1','sp2','sp3','sp4','sp5','sp6'].forEach(id => { document.getElementById(id).className = 'step-pill'; });
-}
-
-function setProg(pct, text) {
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progPct').textContent = pct + '%';
-  document.getElementById('progText').textContent = text;
-}
-
-function activateStep(n) {
-  const ids = ['sp1','sp2','sp3','sp4','sp5','sp6'];
-  for (let i = 0; i < n - 1; i++) document.getElementById(ids[i]).className = 'step-pill done';
-  if (n <= ids.length) document.getElementById(ids[n - 1]).className = 'step-pill active';
-}
-
+function showProg() { document.getElementById('progBox').classList.add('show'); ['sp1','sp2','sp3','sp4','sp5','sp6'].forEach(id => { document.getElementById(id).className = 'step-pill'; }); }
+function setProg(pct, text) { document.getElementById('progFill').style.width = pct + '%'; document.getElementById('progPct').textContent = pct + '%'; document.getElementById('progText').textContent = text; }
+function activateStep(n) { const ids = ['sp1','sp2','sp3','sp4','sp5','sp6']; for (let i = 0; i < n - 1; i++) document.getElementById(ids[i]).className = 'step-pill done'; if (n <= ids.length) document.getElementById(ids[n - 1]).className = 'step-pill active'; }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 </script>
 </body>
