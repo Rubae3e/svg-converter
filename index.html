@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محول صور التلوين - النسخة الكاملة</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --bg: #0d0d0d;
+  --card: #161616;
+  --card2: #1e1e1e;
+  --gold: #f0b429;
+  --gold2: #ffd166;
+  --text: #f0f0f0;
+  --text2: #888;
+  --green: #06d6a0;
+  --red: #ef476f;
+  --blue: #4361ee;
+  --border: #2a2a2a;
+  --radius: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Tajawal', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(240,180,41,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,180,41,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.subtitle { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
+
+/* رفع */
+.upload-area {
+  background: var(--card);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+}
+
+.upload-area:hover, .upload-area.over {
+  border-color: var(--gold);
+  box-shadow: 0 0 40px rgba(240,180,41,0.08);
+}
+
+.upload-area .icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+.upload-area .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.upload-area .hint { color: var(--text2); font-size: 0.82rem; }
+#fileInput { display: none; }
+
+/* معاينة */
+.previews {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.previews.show { display: grid; }
+
+.pbox {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.plabel {
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pimg {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  background: #111;
+  padding: 10px;
+  display: block;
+}
+
+.psvg {
+  width: 100%;
+  height: 220px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.psvg svg {
+  max-width: 100%;
+  max-height: 204px;
+}
+
+/* إعدادات */
+.settings {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.settings.show { display: block; }
+
+.settings-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text2);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.sfield label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.sfield select {
+  width: 100%;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.sfield select:focus { border-color: var(--gold); }
+
+/* زر */
+.cvt-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border: none;
+  border-radius: var(--radius);
+  color: #000;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 30px rgba(240,180,41,0.25);
+}
+
+.cvt-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(240,180,41,0.35);
+}
+
+.cvt-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* تقدم */
+.prog-box {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.prog-box.show { display: block; }
+
+.prog-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+}
+
+.prog-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.steps-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+.step-pill.active {
+  background: rgba(240,180,41,0.1);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.step-pill.done {
+  background: rgba(6,214,160,0.1);
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* خطأ */
+.err-box {
+  display: none;
+  background: rgba(239,71,111,0.08);
+  border: 1px solid var(--red);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  color: var(--red);
+  font-size: 0.88rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.err-box.show { display: block; }
+
+/* نتيجة */
+.result-box {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.result-box.show { display: block; }
+
+.res-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.res-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(6,214,160,0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.res-title { font-size: 1rem; font-weight: 700; color: var(--green); }
+.res-sub { font-size: 0.8rem; color: var(--text2); }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.stat-v { font-size: 1.2rem; font-weight: 900; color: var(--gold); }
+.stat-l { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+
+/* باليت الألوان */
+.palette-section {
+  margin-bottom: 16px;
+}
+
+.palette-title {
+  font-size: 0.82rem;
+  color: var(--text2);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.palette-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.color-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px 4px 4px;
+  font-size: 0.75rem;
+}
+
+.color-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.color-num {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* أزرار التحميل */
+.dl-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.dl-btn {
+  padding: 13px 8px;
+  border-radius: 10px;
+  border: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dl-btn.gold { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
+.dl-btn.blue { background: rgba(67,97,238,0.15); color: #7b9fff; border: 1px solid rgba(67,97,238,0.3); }
+.dl-btn.dark { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+.dl-btn:hover { transform: translateY(-1px); }
+
+/* تعليمات */
+.guide {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.guide h3 { color: var(--gold); margin-bottom: 16px; font-size: 0.95rem; }
+
+.guide-steps { display: flex; flex-direction: column; gap: 10px; }
+
+.guide-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.gnum {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+code { color: var(--gold); background: rgba(240,180,41,0.08); padding: 1px 5px; border-radius: 4px; font-size: 0.82rem; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.pulse { animation: pulse 1.5s infinite; }
+
+@media(max-width:600px) {
+  h1 { font-size: 1.5rem; }
+  .previews.show { grid-template-columns: 1fr; }
+  .settings-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2,1fr); }
+  .dl-btns { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="container">
+
+  <header>
+    <span class="logo">🎨</span>
+    <h1>محول صور التلوين</h1>
+    <p class="subtitle">ارفع أي صورة ← احصل على SVG تلوين بالأرقام والألوان جاهز لـ colordrama</p>
+  </header>
+
+  <!-- رفع -->
+  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+    <span class="icon">📁</span>
+    <div class="title">اسحب الصورة هنا أو اضغط للاختيار</div>
+    <div class="hint">PNG, JPG, WEBP • الحد الأقصى 10MB • الأفضل: صور كارتونية بخطوط واضحة</div>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+
+  <!-- معاينة -->
+  <div class="previews" id="previews">
+    <div class="pbox">
+      <div class="plabel">📷 الصورة الأصلية</div>
+      <img class="pimg" id="origImg" src="" alt="">
+    </div>
+    <div class="pbox">
+      <div class="plabel">🎨 نتيجة التلوين بالأرقام</div>
+      <div class="psvg" id="svgPreview">
+        <span style="color:#999;font-size:0.82rem">في انتظار التحويل...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- إعدادات -->
+  <div class="settings" id="settings">
+    <div class="settings-title">⚙️ إعدادات التحويل</div>
+    <div class="settings-grid">
+      <div class="sfield">
+        <label>عدد الألوان</label>
+        <select id="maxColors">
+          <option value="8">8 ألوان (سهل جداً)</option>
+          <option value="15">15 لون (سهل)</option>
+          <option value="25" selected>25 لون (متوسط ⭐)</option>
+          <option value="35">35 لون (تفصيلي)</option>
+          <option value="50">50 لون (احترافي)</option>
+        </select>
+      </div>
+      <div class="sfield">
+        <label>حجم الأرقام</label>
+        <select id="fontSize">
+          <option value="small">صغير</option>
+          <option value="medium" selected>متوسط ⭐</option>
+          <option value="large">كبير</option>
+        </select>
+      </div>
+      <div class="sfield">
+        <label>نمط الإخراج</label>
+        <select id="outputMode">
+          <option value="numbered">تلوين بالأرقام ⭐</option>
+          <option value="colored">ملون (مرجع)</option>
+          <option value="both">كلاهما</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- زر التحويل -->
+  <button class="cvt-btn" id="cvtBtn" onclick="convert()" disabled>
+    🔄 تحويل إلى لغز تلوين
+  </button>
+
+  <!-- تقدم -->
+  <div class="prog-box" id="progBox">
+    <div class="prog-head">
+      <span id="progText" class="pulse">جاري التحويل...</span>
+      <span id="progPct">0%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="progFill"></div>
+    </div>
+    <div class="steps-row">
+      <div class="step-pill" id="sp1">📤 رفع الصورة</div>
+      <div class="step-pill" id="sp2">🔍 تحليل الألوان</div>
+      <div class="step-pill" id="sp3">✏️ تحويل لـ SVG</div>
+      <div class="step-pill" id="sp4">🏷️ إضافة أرقام</div>
+      <div class="step-pill" id="sp5">🎨 إزالة الألوان</div>
+      <div class="step-pill" id="sp6">✅ اكتمل</div>
+    </div>
+  </div>
+
+  <!-- خطأ -->
+  <div class="err-box" id="errBox"></div>
+
+  <!-- نتيجة -->
+  <div class="result-box" id="resultBox">
+    <div class="res-head">
+      <div class="res-icon">✅</div>
+      <div>
+        <div class="res-title">تم إنشاء لغز التلوين!</div>
+        <div class="res-sub" id="resSub">جاهز للاستخدام في colordrama</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-v" id="sPaths">-</div><div class="stat-l">مناطق</div></div>
+      <div class="stat"><div class="stat-v" id="sColors">-</div><div class="stat-l">ألوان</div></div>
+      <div class="stat"><div class="stat-v" id="sSize">-</div><div class="stat-l">KB</div></div>
+      <div class="stat"><div class="stat-v" id="sDiff">-</div><div class="stat-l">الصعوبة</div></div>
+    </div>
+
+    <!-- باليت الألوان -->
+    <div class="palette-section">
+      <div class="palette-title">🎨 الباليت — الألوان والأرقام:</div>
+      <div class="palette-grid" id="paletteGrid"></div>
+    </div>
+
+    <!-- أزرار التحميل -->
+    <div class="dl-btns">
+      <button class="dl-btn gold" onclick="downloadNumbered()">⬇️ SVG بالأرقام</button>
+      <button class="dl-btn blue" onclick="downloadColored()">🎨 SVG ملون</button>
+      <button class="dl-btn dark" onclick="downloadDart()">📱 كود Flutter</button>
+    </div>
+  </div>
+
+  <!-- دليل الاستخدام -->
+  <div class="guide">
+    <h3>🚀 كيفية الاستخدام في colordrama</h3>
+    <div class="guide-steps">
+      <div class="guide-step">
+        <div class="gnum">1</div>
+        <div>ارفع صورة كارتونية بخطوط واضحة للحصول على أفضل نتيجة (مثل صور coloring pages)</div>
+      </div>
+      <div class="guide-step">
+        <div class="gnum">2</div>
+        <div>اختر عدد الألوان المناسب واضغط "تحويل" وانتظر 15-30 ثانية</div>
+      </div>
+      <div class="guide-step">
+        <div class="gnum">3</div>
+        <div>حمّل <code>SVG بالأرقام</code> وضعه في <code>assets/puzzles/puzzle.svg</code></div>
+      </div>
+      <div class="guide-step">
+        <div class="gnum">4</div>
+        <div>حمّل <code>كود Flutter</code> وضعه في <code>lib/data/new_puzzle.dart</code></div>
+      </div>
+      <div class="guide-step">
+        <div class="gnum">5</div>
+        <div>قل لـ Claude Code: <code>"Add new_puzzle.dart to the puzzles list"</code></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API_ID = 'vkr4nfv6pfqhavm';
+const API_SECRET = 'c6f6ndg0euq12ks199ih382appq5jsadigae48clb5tm6m2kcosk';
+
+let selectedFile = null;
+let coloredSVG = null;   // SVG ملون من API
+let numberedSVG = null;  // SVG بالأرقام (بدون ألوان)
+let colorMap = {};       // رقم → لون
+let pathCount = 0;
+
+// رفع الملف
+document.getElementById('fileInput').addEventListener('change', e => {
+  if (e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+const ua = document.getElementById('uploadArea');
+ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('over'); });
+ua.addEventListener('dragleave', () => ua.classList.remove('over'));
+ua.addEventListener('drop', e => {
+  e.preventDefault();
+  ua.classList.remove('over');
+  const f = e.dataTransfer.files[0];
+  if (f?.type.startsWith('image/')) loadFile(f);
+});
+
+function loadFile(file) {
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('origImg').src = e.target.result;
+    document.getElementById('previews').classList.add('show');
+    document.getElementById('settings').classList.add('show');
+    document.getElementById('cvtBtn').disabled = false;
+    document.getElementById('svgPreview').innerHTML = '<span style="color:#999;font-size:0.82rem">في انتظار التحويل...</span>';
+    document.getElementById('resultBox').classList.remove('show');
+    document.getElementById('errBox').classList.remove('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function convert() {
+  if (!selectedFile) return;
+
+  const btn = document.getElementById('cvtBtn');
+  btn.disabled = true;
+  coloredSVG = null;
+  numberedSVG = null;
+
+  showProg();
+  document.getElementById('errBox').classList.remove('show');
+  document.getElementById('resultBox').classList.remove('show');
+
+  try {
+    // === الخطوة 1: رفع الصورة ===
+    activateStep(1);
+    setProg(10, 'جاري تحضير الصورة...');
+
+    const arrayBuffer = await selectedFile.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const boundary = '----CVBoundary' + Date.now();
+    const enc = new TextEncoder();
+
+    const parts = [];
+    parts.push(enc.encode(`--${boundary}\r\nContent-Disposition: form-data; name="image"; filename="${selectedFile.name}"\r\nContent-Type: ${selectedFile.type}\r\n\r\n`));
+    parts.push(uint8Array);
+    parts.push(enc.encode('\r\n'));
+    parts.push(enc.encode(`--${boundary}--\r\n`));
+
+    const totalLen = parts.reduce((s, p) => s + p.length, 0);
+    const body = new Uint8Array(totalLen);
+    let off = 0;
+    for (const p of parts) { body.set(p, off); off += p.length; }
+
+    // === الخطوة 2: إرسال للـ API ===
+    activateStep(2);
+    setProg(25, 'جاري تحليل الصورة...');
+
+    const res = await fetch('https://vectorizer.ai/api/v1/vectorize', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + btoa(`${API_ID}:${API_SECRET}`),
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      },
+      body
+    });
+
+    // === الخطوة 3: استقبال SVG ===
+    activateStep(3);
+    setProg(50, 'جاري تحويل لـ SVG...');
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`API Error ${res.status}: ${err.slice(0,300)}`);
+    }
+
+    coloredSVG = await res.text();
+
+    // === الخطوة 4: استخراج الألوان وإضافة أرقام ===
+    activateStep(4);
+    setProg(70, 'جاري تحليل الألوان وإضافة أرقام...');
+
+    const { numbered, palette, paths } = processSVG(coloredSVG);
+    numberedSVG = numbered;
+    colorMap = palette;
+    pathCount = paths;
+
+    // === الخطوة 5: إنشاء نسخة البيضاء بالأرقام ===
+    activateStep(5);
+    setProg(88, 'جاري إزالة الألوان...');
+
+    await sleep(300);
+
+    // === الخطوة 6: اكتمل ===
+    activateStep(6);
+    setProg(100, '✅ اكتمل!');
+
+    // عرض النتيجة
+    document.getElementById('svgPreview').innerHTML = numberedSVG;
+    const svgEl = document.getElementById('svgPreview').querySelector('svg');
+    if (svgEl) {
+      svgEl.style.maxWidth = '100%';
+      svgEl.style.maxHeight = '204px';
+    }
+
+    // إحصائيات
+    const colorCount = Object.keys(colorMap).length;
+    document.getElementById('sPaths').textContent = paths;
+    document.getElementById('sColors').textContent = colorCount;
+    document.getElementById('sSize').textContent = Math.round(new Blob([numberedSVG]).size / 1024);
+    
+    let diff = 'سهل';
+    if (colorCount > 30) diff = 'صعب';
+    else if (colorCount > 15) diff = 'متوسط';
+    document.getElementById('sDiff').textContent = diff;
+    document.getElementById('resSub').textContent = `${paths} منطقة • ${colorCount} لون • مستوى ${diff}`;
+
+    // عرض الباليت
+    buildPalette(colorMap);
+
+    setTimeout(() => {
+      document.getElementById('progBox').classList.remove('show');
+      document.getElementById('resultBox').classList.add('show');
+    }, 500);
+
+  } catch (err) {
+    document.getElementById('progBox').classList.remove('show');
+    const eb = document.getElementById('errBox');
+    eb.innerHTML = `❌ <strong>خطأ:</strong> ${err.message}<br><small style="color:#888;margin-top:4px;display:block">تأكد من تشغيل الملف محلياً في المتصفح وليس من claude.ai</small>`;
+    eb.classList.add('show');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ========== معالجة SVG ==========
+function processSVG(svgText) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgText, 'image/svg+xml');
+  const svg = doc.querySelector('svg');
+  
+  if (!svg) throw new Error('لم يتم العثور على SVG صالح في الاستجابة');
+
+  // استخراج جميع العناصر الملونة
+  const elements = svg.querySelectorAll('path, rect, circle, ellipse, polygon, polyline');
+  
+  // جمع الألوان الفريدة
+  const colorCount = {};
+  elements.forEach(el => {
+    const color = getElementColor(el);
+    if (color && color !== 'none' && color !== 'transparent') {
+      colorCount[color] = (colorCount[color] || 0) + 1;
+    }
+  });
+
+  // ترتيب الألوان من الأكثر استخداماً
+  const maxColors = parseInt(document.getElementById('maxColors').value);
+  const sortedColors = Object.entries(colorCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, maxColors);
+
+  // بناء خريطة اللون → رقم
+  const colorToNum = {};
+  sortedColors.forEach(([color], i) => {
+    colorToNum[color] = i + 1;
+  });
+
+  // بناء SVG جديد بالأرقام
+  const viewBox = svg.getAttribute('viewBox') || `0 0 ${svg.getAttribute('width')} ${svg.getAttribute('height')}`;
+  const vbParts = viewBox.split(/\s+|,/);
+  const vbWidth = parseFloat(vbParts[2]) || 800;
+  const vbHeight = parseFloat(vbParts[3]) || 600;
+
+  const fontSize = {
+    small: Math.max(6, vbWidth * 0.02),
+    medium: Math.max(8, vbWidth * 0.03),
+    large: Math.max(10, vbWidth * 0.04),
+  }[document.getElementById('fontSize').value];
+
+  let numberedPaths = '';
+  let processedCount = 0;
+
+  elements.forEach((el, idx) => {
+    const color = getElementColor(el);
+    const num = colorToNum[color];
+    if (!num) return;
+
+    processedCount++;
+
+    // الشكل باللون الأبيض وحدود سوداء
+    const tagName = el.tagName.toLowerCase();
+    const attrs = getElementAttrs(el, tagName);
+    
+    numberedPaths += `<${tagName} ${attrs} fill="white" stroke="#333" stroke-width="0.5" opacity="1"/>\n`;
+
+    // إضافة رقم في المركز
+    const center = getElementCenter(el, tagName, vbWidth, vbHeight);
+    if (center) {
+      numberedPaths += `<text x="${center.x.toFixed(1)}" y="${center.y.toFixed(1)}" 
+        text-anchor="middle" dominant-baseline="middle"
+        font-size="${fontSize.toFixed(1)}" font-family="Arial" font-weight="bold"
+        fill="#222" stroke="white" stroke-width="${(fontSize*0.3).toFixed(1)}" paint-order="stroke"
+      >${num}</text>\n`;
+    }
+  });
+
+  const numbered = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" style="background:white">
+${numberedPaths}
+</svg>`;
+
+  // بناء الباليت
+  const palette = {};
+  Object.entries(colorToNum).forEach(([color, num]) => {
+    palette[num] = color;
+  });
+
+  return { numbered, palette, paths: processedCount };
+}
+
+function getElementColor(el) {
+  const style = el.getAttribute('style') || '';
+  const fillMatch = style.match(/fill:\s*([^;]+)/);
+  if (fillMatch) return fillMatch[1].trim();
+  const fill = el.getAttribute('fill');
+  if (fill) return fill.trim();
+  return null;
+}
+
+function getElementAttrs(el, tagName) {
+  const exclude = ['style', 'fill', 'stroke', 'stroke-width', 'opacity'];
+  const attrs = [];
+  for (const attr of el.attributes) {
+    if (!exclude.includes(attr.name)) {
+      attrs.push(`${attr.name}="${attr.value}"`);
+    }
+  }
+  return attrs.join(' ');
+}
+
+function getElementCenter(el, tagName, vbW, vbH) {
+  try {
+    if (tagName === 'rect') {
+      const x = parseFloat(el.getAttribute('x') || 0);
+      const y = parseFloat(el.getAttribute('y') || 0);
+      const w = parseFloat(el.getAttribute('width') || 0);
+      const h = parseFloat(el.getAttribute('height') || 0);
+      return { x: x + w/2, y: y + h/2 };
+    }
+    if (tagName === 'circle' || tagName === 'ellipse') {
+      return {
+        x: parseFloat(el.getAttribute('cx') || 0),
+        y: parseFloat(el.getAttribute('cy') || 0)
+      };
+    }
+    if (tagName === 'path') {
+      const d = el.getAttribute('d') || '';
+      const nums = d.match(/[-+]?\d*\.?\d+/g);
+      if (nums && nums.length >= 4) {
+        const xs = [], ys = [];
+        for (let i = 0; i < Math.min(nums.length - 1, 20); i += 2) {
+          xs.push(parseFloat(nums[i]));
+          ys.push(parseFloat(nums[i+1]));
+        }
+        return {
+          x: xs.reduce((a,b) => a+b, 0) / xs.length,
+          y: ys.reduce((a,b) => a+b, 0) / ys.length
+        };
+      }
+    }
+    if (tagName === 'polygon' || tagName === 'polyline') {
+      const points = (el.getAttribute('points') || '').trim().split(/\s+|,/);
+      const xs = [], ys = [];
+      for (let i = 0; i < points.length - 1; i += 2) {
+        xs.push(parseFloat(points[i]));
+        ys.push(parseFloat(points[i+1]));
+      }
+      if (xs.length) return {
+        x: xs.reduce((a,b) => a+b, 0) / xs.length,
+        y: ys.reduce((a,b) => a+b, 0) / ys.length
+      };
+    }
+  } catch(e) {}
+  return null;
+}
+
+function buildPalette(palette) {
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = '';
+  Object.entries(palette).sort((a,b) => a[0]-b[0]).forEach(([num, color]) => {
+    const chip = document.createElement('div');
+    chip.className = 'color-chip';
+    chip.innerHTML = `
+      <div class="color-dot" style="background:${color}"></div>
+      <span class="color-num">${num}</span>
+    `;
+    grid.appendChild(chip);
+  });
+}
+
+// ========== تحميل الملفات ==========
+function downloadNumbered() {
+  if (!numberedSVG) return;
+  downloadFile(numberedSVG, `coloring_puzzle_${Date.now()}.svg`, 'image/svg+xml');
+}
+
+function downloadColored() {
+  if (!coloredSVG) return;
+  downloadFile(coloredSVG, `colored_reference_${Date.now()}.svg`, 'image/svg+xml');
+}
+
+function downloadDart() {
+  if (!colorMap || Object.keys(colorMap).length === 0) return;
+
+  const paletteCode = Object.entries(colorMap)
+    .map(([num, color]) => {
+      const hex = color.replace('#','');
+      return `  PaletteColor(number: ${num}, color: Color(0xFF${hex.toUpperCase()})),`;
+    }).join('\n');
+
+  const dart = `// lib/data/new_puzzle.dart
+// تم توليد هذا الملف تلقائياً بواسطة SVG Coloring Converter
+
+import 'package:flutter/material.dart';
+
+// الباليت — ${Object.keys(colorMap).length} لون
+const List<PaletteColor> newPuzzlePalette = [
+${paletteCode}
+];
+
+// لتحميل اللغز:
+// final puzzle = await loadSvgPuzzle(
+//   assetPath: 'assets/puzzles/puzzle.svg',
+//   palette: newPuzzlePalette,
+//   name: 'لغز جديد',
+//   difficulty: 2,
+// );
+`;
+
+  downloadFile(dart, `new_puzzle_${Date.now()}.dart`, 'text/plain');
+}
+
+function downloadFile(content, name, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ========== مساعدات ==========
+function showProg() {
+  document.getElementById('progBox').classList.add('show');
+  ['sp1','sp2','sp3','sp4','sp5','sp6'].forEach(id => {
+    document.getElementById(id).className = 'step-pill';
+  });
+}
+
+function setProg(pct, text) {
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progPct').textContent = pct + '%';
+  document.getElementById('progText').textContent = text;
+}
+
+function activateStep(n) {
+  const ids = ['sp1','sp2','sp3','sp4','sp5','sp6'];
+  for (let i = 0; i < n-1; i++) document.getElementById(ids[i]).className = 'step-pill done';
+  if (n <= ids.length) document.getElementById(ids[n-1]).className = 'step-pill active';
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
